@@ -1,0 +1,57 @@
+#include <stdint.h>
+
+/* GPIO_TypeDef structure definition */
+typedef struct
+{
+	 volatile uint32_t MODER;	/* Offset: 0x00 */
+	 volatile uint32_t OTYPER;	/* Offset: 0x04 */
+	 volatile uint32_t OSPEEDR;	/* Offset: 0x08 */
+	 volatile uint32_t PUPDR;	/* Offset: 0x0C */
+	 volatile uint32_t IDR;		/* Offset: 0x10 */
+	 volatile uint32_t ODR;		/* Offset: 0x14 */
+	 volatile uint32_t BSRR;	/* Offset: 0x18 */
+	 volatile uint32_t LCKR;	/* Offset: 0x1C */
+	 volatile uint32_t AFRL;	/* Offset: 0x20 */
+	 volatile uint32_t AFRH;	/* Offset: 0x24 */
+	 volatile uint32_t BRR;		/* Offset: 0x28 */
+} GPIO_TypeDef;
+
+/* RCC_TypeDef structure definition */
+typedef struct
+{
+	volatile uint32_t DUMMY[13];
+	volatile uint32_t IOPENR;	/* Offset: 0x34*/
+} RCC_TypeDef;
+
+/* Base address definitions for STM32C0 */
+#define RCC_BASE	0x40021000
+#define GPIOA_BASE	0x50000000
+
+/* Peripheral pointer definitions */
+#define RCC			((RCC_TypeDef*) RCC_BASE)
+#define GPIOA		((GPIO_TypeDef*)GPIOA_BASE)
+
+/* Bit mask for enabling GPIOA (bit 0) */
+#define GPIOAEN		(1U << 0)
+
+/* Bit mask for GPIOA pin 5 */
+#define PIN5		(1U << 5)
+
+/* Alias for PIN5 representing LED pin */
+#define LED_PIN		PIN5
+
+int main(void)
+{
+	/* Enable clock access to GPIOA */
+	RCC->IOPENR |= GPIOAEN;
+	GPIOA->MODER |= (1U<<10);
+	GPIOA->MODER &= ~(1U<<11);
+
+	while(1)
+	{
+	 /* Set PA5(LED_PIN) high */
+	 GPIOA->ODR^= LED_PIN;
+
+	 for(int i=0;i<1000000;i++); /**< Simple delay */
+	}
+}
