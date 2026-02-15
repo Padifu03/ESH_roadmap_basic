@@ -53,3 +53,29 @@ dkms.conf
 
 # debug information files
 *.dwo
+
+# STM32CubeIDE
+.metadata/
+.settings/
+.project
+.cproject
+Debug/
+Release/
+*.launch
+RemoteSystemsTempFiles/
+.cdt.preprocessor.locks
+.vscode/
+
+# STM32CubeMX
+*.mxproject
+*.IOC
+
+# Embedded development
+*.axf
+*.scvd
+*.zip
+*.ioc
+
+# IDE temporary and cache files
+.DS_Store
+Thumbs.db
