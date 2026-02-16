@@ -1,49 +1,47 @@
 ################################################################################
 # STM32 Embedded Project .gitignore
-# Professional configuration for STM32CubeIDE, CubeMX, and team collaboration
+# VS Code + STM32 VS Code Extension + CMake/Ninja workflow
 ################################################################################
 
 # =============================================================================
-# STM32CubeIDE Configuration
+# CMake Build Outputs
 # =============================================================================
-# NOTE: .project and .cproject ARE committed to allow team members to open
-# projects directly in STM32CubeIDE without manual configuration
+# CMake out-of-source build directories (never commit)
+build/
+out/
 
-# Eclipse workspace metadata (user-specific)
-.metadata/
+# CMake generated files
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+compile_commands.json
+CTestTestfile.cmake
+_deps/
 
-# User-specific IDE settings
-.settings/
-
-# Remote systems explorer
-RemoteSystemsTempFiles/
-
-# IDE preprocessor cache
-.cdt.preprocessor.locks
+# Ninja build files
+.ninja_deps
+.ninja_log
 
 # =============================================================================
-# STM32CubeMX Configuration
+# VS Code
 # =============================================================================
-# NOTE: .ioc files ARE committed - they define the MCU hardware configuration
-# and are REQUIRED for code regeneration across the team
+# Ignore user-specific VS Code settings by default
+# NOTE: .vscode/extensions.json IS committed for workspace recommendations
+# NOTE: .vscode/launch.json IS committed for shared debug configurations
+.vscode/*
+!.vscode/extensions.json
+!.vscode/launch.json
 
-# MX temporary files (if any)
+# =============================================================================
+# STM32 VS Code Extension
+# =============================================================================
+# NOTE: .settings/ stores STM32 extension bundle/pack info and IS committed
+#       via per-project .gitignore overrides (e.g. !.settings)
+# NOTE: .ioc files ARE committed — they define MCU hardware configuration
+#       and are REQUIRED for code regeneration across the team
+
+# STM32CubeMX temporary files
 *.mxproject
-
-# =============================================================================
-# Build Outputs (Never commit)
-# =============================================================================
-Debug/
-debug/
-Release/
-release/
-
-# =============================================================================
-# Run/Debug Configurations
-# =============================================================================
-# User-specific launch configurations are ignored
-# To share a launch config, commit it explicitly after removing user paths
-*.launch
 
 # =============================================================================
 # Compiled Object Files and Dependencies
@@ -101,24 +99,15 @@ release/
 *.dwo
 
 # =============================================================================
-# Kernel Module Build Artifacts
+# OS Files
 # =============================================================================
-*.mod*
-*.cmd
-.tmp_versions/
-modules.order
-Module.symvers
-Mkfile.old
-dkms.conf
-
-# =============================================================================
-# IDE and Editor Files
-# =============================================================================
-.vscode/
 .DS_Store
 Thumbs.db
+Desktop.ini
 
 # =============================================================================
-# Compressed Archives (Build artifacts)
+# Compressed Archives
 # =============================================================================
 *.zip
+*.tar.gz
+*.7z
