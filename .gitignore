@@ -1,48 +1,108 @@
-# Prerequisites
-*.d
+################################################################################
+# STM32 Embedded Project .gitignore
+# Professional configuration for STM32CubeIDE, CubeMX, and team collaboration
+################################################################################
 
-# Object files
+# =============================================================================
+# STM32CubeIDE Configuration
+# =============================================================================
+# NOTE: .project and .cproject ARE committed to allow team members to open
+# projects directly in STM32CubeIDE without manual configuration
+
+# Eclipse workspace metadata (user-specific)
+.metadata/
+
+# User-specific IDE settings
+.settings/
+
+# Remote systems explorer
+RemoteSystemsTempFiles/
+
+# IDE preprocessor cache
+.cdt.preprocessor.locks
+
+# =============================================================================
+# STM32CubeMX Configuration
+# =============================================================================
+# NOTE: .ioc files ARE committed - they define the MCU hardware configuration
+# and are REQUIRED for code regeneration across the team
+
+# MX temporary files (if any)
+*.mxproject
+
+# =============================================================================
+# Build Outputs (Never commit)
+# =============================================================================
+Debug/
+debug/
+Release/
+release/
+
+# =============================================================================
+# Run/Debug Configurations
+# =============================================================================
+# User-specific launch configurations are ignored
+# To share a launch config, commit it explicitly after removing user paths
+*.launch
+
+# =============================================================================
+# Compiled Object Files and Dependencies
+# =============================================================================
 *.o
 *.ko
 *.obj
 *.elf
+*.d
 
-# Linker output
+# =============================================================================
+# Linker Outputs
+# =============================================================================
 *.ilk
 *.map
 *.exp
 
+# =============================================================================
 # Precompiled Headers
+# =============================================================================
 *.gch
 *.pch
 
-# Libraries
+# =============================================================================
+# Static and Shared Libraries
+# =============================================================================
 *.lib
 *.a
 *.la
 *.lo
-
-# Shared objects (inc. Windows DLLs)
 *.dll
 *.so
 *.so.*
 *.dylib
 
-# Executables
+# =============================================================================
+# Executables and Binary Outputs
+# =============================================================================
 *.exe
 *.out
 *.app
 *.i*86
 *.x86_64
 *.hex
+*.bin
+*.axf
 
-# Debug files
+# =============================================================================
+# Debug Information Files
+# =============================================================================
 *.dSYM/
 *.su
 *.idb
 *.pdb
+*.dwo
 
-# Kernel Module Compile Results
+# =============================================================================
+# Kernel Module Build Artifacts
+# =============================================================================
 *.mod*
 *.cmd
 .tmp_versions/
@@ -51,31 +111,14 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
-# debug information files
-*.dwo
-
-# STM32CubeIDE
-.metadata/
-.settings/
-.project
-.cproject
-Debug/
-Release/
-*.launch
-RemoteSystemsTempFiles/
-.cdt.preprocessor.locks
+# =============================================================================
+# IDE and Editor Files
+# =============================================================================
 .vscode/
-
-# STM32CubeMX
-*.mxproject
-*.IOC
-
-# Embedded development
-*.axf
-*.scvd
-*.zip
-*.ioc
-
-# IDE temporary and cache files
 .DS_Store
 Thumbs.db
+
+# =============================================================================
+# Compressed Archives (Build artifacts)
+# =============================================================================
+*.zip
