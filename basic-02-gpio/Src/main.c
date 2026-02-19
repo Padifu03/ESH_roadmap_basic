@@ -12,24 +12,30 @@
  *
  ******************************************************************************
  */
-#include "stm32c031xx.h"
-#include <stdint.h>
-
-/* Alias for PIN5 representing LED pin */
-#define LED_PIN		GPIO_ODR_OD5
+#include "gpio.h"
 
 int main(void)
 {
-	/* Enable clock access to GPIOA */
-	RCC->IOPENR |= RCC_IOPENR_GPIOAEN;
-	GPIOA->MODER |= (1U<<10);
-	GPIOA->MODER &= ~(1U<<11);
+	bool btn_state;
+
+	/* Initialize LED */
+	led_init();
+
+	/* Initialize Pushbutton */
+	btn_init();
 
 	while(1)
 	{
-	 /* Set PA5(LED_PIN) high */
-	 GPIOA->ODR^= LED_PIN;
+		/* Get button State */
+		btn_state = btn_get_state();
 
-	 for(int i=0;i<1000000;i++); /**< Simple delay */
+		if(btn_state)
+		{
+			led_on();
+		}
+		else
+		{
+			led_off();
+		}
 	}
 }
