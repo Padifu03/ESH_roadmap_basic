@@ -21,7 +21,7 @@
 #
 
 # Core project settings
-project("basic-01-headers")
+project("basic-02-gpio")
 enable_language(C CXX ASM)
 message("Build type: " ${CMAKE_BUILD_TYPE})
 
