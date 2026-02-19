@@ -14,15 +14,6 @@
  */
 #include "gpio.h"
 
-/* LED - PA5 */
-#define GPIOAEN		(1U << 0)
-#define LED_BS5		(1U << 5)
-#define LED_BR5		(1U << 21)
-
-/* BUTTON - PC13 */
-#define GPIOCEN		(1U << 2)
-#define BTN_PIN		(1U << 13)
-
 void led_init(void)
 {
 	/* Enable clock access to GPIOA */
@@ -56,8 +47,8 @@ void btn_init(void)
 
 bool btn_get_state(void)
 {
-	 /* Note : BTN is active low */
-	 if(GPIOC->IDR & BTN_PIN)
+	 /* Note : BTN is active low and connected to PC13 */
+	 if(GPIOC->IDR & GPIO_IDR_ID13)
 	 {
 		 return false;
 	 }
