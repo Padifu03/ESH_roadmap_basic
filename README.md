@@ -27,7 +27,8 @@ basic-XX-<description>/
 
 - **basic-00-cstruct**: Introduction to STM32C031C6T6 microcontroller programming with basic C structure and setup
 - **base-nucleoc031c6-board-mx-project**: STM32CubeMX-generated base project for the Nucleo-C031C6 board
-- **basic-01-headers**: NUCLE-C031C6 project which takes hardware CubeMx-generated drivers code and use it to blink the user led.
+- **basic-01-headers**: NUCLEO-C031C6 project which takes hardware CubeMx-generated drivers code and use it to blink the user led.
+- **basic-02-gpio**: NUCLEO-C031C6 project that shows how to control basic GPIOs focused on user LED and button.
 
 ## Requirements
 
