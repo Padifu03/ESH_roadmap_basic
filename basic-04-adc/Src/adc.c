@@ -28,10 +28,6 @@ void adc1_ch1_init(void)
 	/* Enable clock access to ADC */
 	RCC->APBENR2 |= RCC_APBENR2_ADCEN;
 
-	/* Calibrate ADC */
-	ADC1->CR |= ADC_CR_ADCAL;
-	while (ADC1->CR & ADC_CR_ADCAL);
-
 	/* Configure sequence - select channel 1 (PA1 = ADC_IN1) */
 	ADC1->CHSELR = ADC_CHSELR_CHSEL1;
 
