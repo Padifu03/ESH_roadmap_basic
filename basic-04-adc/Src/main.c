@@ -12,109 +12,51 @@
  *
  ******************************************************************************
  */
-#include <stdlib.h>
-#include <string.h>
-
+#include "adc.h"
 #include "uart.h"
 
-#define MAX_CMD_LEN 64
-
-static uint32_t sampling_freq = 1;
-
-/**
- * @brief  Convert an unsigned integer to a decimal string.
- * @param  val   Value to convert
- * @param  buf   Output buffer (must be at least 11 bytes for a 32-bit value)
- */
-static void uint_to_str(uint32_t val, char *buf)
+/* Lightweight integer to decimal string (works for 0..99999) */
+static void itoa_simple(int val, char *buf)
 {
-	char tmp[11];
+	if (val < 0) { *buf++ = '-'; val = -val; }
+	char tmp[10];
 	int i = 0;
-
-	if (val == 0)
-	{
-		buf[0] = '0';
-		buf[1] = '\0';
-		return;
-	}
-	while (val > 0)
-	{
+	do {
 		tmp[i++] = '0' + (val % 10);
 		val /= 10;
-	}
-	int j = 0;
-	while (i > 0)
-	{
-		buf[j++] = tmp[--i];
-	}
-	buf[j] = '\0';
+	} while (val);
+	while (i--) *buf++ = tmp[i];
+	*buf = '\0';
 }
+
+int sensor_value;
 
 int main(void)
 {
-	uint8_t cmd_buffer[MAX_CMD_LEN];
-	uint32_t index = 0;
-
+	adc1_ch1_init();
 	uart_init();
-	uart_print("Serial Command Interface ready!\r\n");
+	uart_print("Simple audio system with adjustable volume ready!\r\n");
+
+	//adc1_ch1_start_continuous_conversion();
 
 	while(1)
 	{
-		/* Read one character from UART */
-		uint8_t ch = uart_read();
+		adc1_ch1_single_conversion();
+		sensor_value = adc1_ch1_read();
 
-		if (ch == '\n' || ch == '\r')
-		{
-			/* Null-terminate the received command */
-			cmd_buffer[index] = '\0';
+		char num_buf[12];
 
-			/* Handle "SET_FREQ <value>" command */
-			if (strncmp((const char *)cmd_buffer, "SET_FREQ ", 9) == 0)
-			{
-				/* Parse frequency value */
-				int freq = atoi((const char *)&cmd_buffer[9]);
-				if (freq > 0)
-				{
-					/* Update sampling frequency */
-					sampling_freq = freq;
-					uart_print("OK: Frequency set to ");
-					char num[11];
-					uint_to_str(sampling_freq, num);
-					uart_print(num);
-					uart_print(" Hz\r\n");
-				}
-				else
-				{
-					uart_print("ERROR: Invalid frequency\r\n");
-				}
-			}
-			/* Handle "GET_STATUS" command */
-			else if (strcmp((const char *)cmd_buffer, "GET_STATUS") == 0)
-			{
-				uart_print("STATUS OK, FREQ=");
-				char num[11];
-				uint_to_str(sampling_freq, num);
-				uart_print(num);
-				uart_print("\r\n");
-			}
-			/* Unknown command */
-			else
-			{
-				uart_print("ERROR: Unknown command\r\n");
-			}
-			/* Reset buffer index after processing */
-			index = 0;
-		}
-		else if (index < MAX_CMD_LEN - 1)
-		{
-			/* Append character to command buffer */
-			cmd_buffer[index++] = ch;
-		}
-		else
-		{
-			/* Reset on overflow */
-			index = 0;
-			uart_print("ERROR: Overflow. Command too long\r\n");
-		}
+		uart_print("Sensor value = ");
+		itoa_simple(sensor_value, num_buf);
+		uart_print(num_buf);
+		uart_print("\r\n");
+
+		/* 0 -> 0%, 4095 -> 100% */
+		int volume_percentage = sensor_value * 100 / 4095;
+		uart_print("Volume = ");
+		itoa_simple(volume_percentage, num_buf);
+		uart_print(num_buf);
+		uart_print("%\r\n\n");
+		for (volatile int i = 0; i < 1000000; i++); // ~1 s delay
 	}
 }
