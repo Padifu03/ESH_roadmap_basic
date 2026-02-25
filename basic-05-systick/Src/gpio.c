@@ -35,6 +35,12 @@ void led_off(void)
 	GPIOA->ODR &= ~GPIO_ODR_OD5;
 }
 
+void led_toggle(void)
+{
+	/* Toggle PA5 */
+	GPIOA->ODR ^= GPIO_ODR_OD5;
+}
+
 void btn_init(void)
 {
 	/* Enable clock access to GPIOC */
@@ -47,13 +53,6 @@ void btn_init(void)
 
 bool btn_get_state(void)
 {
-	 /* Note : BTN is active low and connected to PC13 */
-	 if(GPIOC->IDR & GPIO_IDR_ID13)
-	 {
-		 return false;
-	 }
-	 else
-	 {
-		 return true;
-	 }
+	/* BTN is active-low on PC13: pin HIGH = not pressed, pin LOW = pressed */
+	return !(GPIOC->IDR & GPIO_IDR_ID13);
 }
