@@ -12,15 +12,108 @@
  *
  ******************************************************************************
  */
-#include <stdlib.h>
-#include <string.h>
+#include <stdbool.h>
 
-#include "uart.h"
 #include "gpio.h"
+#include "systick.h"
+#include "uart.h"
 
-#define MAX_CMD_LEN 64
+/* Half-period in ms for each blink mode */
+#define SLOW_HALF_PERIOD_MS    500U   /* 1 Hz  → 500 ms on, 500 ms off */
+#define MEDIUM_HALF_PERIOD_MS  250U   /* 2 Hz  → 250 ms on, 250 ms off */
+#define FAST_HALF_PERIOD_MS    125U   /* 4 Hz  → 125 ms on, 125 ms off */
+
+#define DEBOUNCE_MS             50U   /* Button debounce time */
+#define NUM_MODES                3U
+
+static const uint32_t half_periods[NUM_MODES] = {
+	SLOW_HALF_PERIOD_MS,
+	MEDIUM_HALF_PERIOD_MS,
+	FAST_HALF_PERIOD_MS
+};
+
+static const char *mode_names[NUM_MODES] = {
+	"Slow (1 Hz)",
+	"Medium (2 Hz)",
+	"Fast (4 Hz)"
+};
+
+static void uint_to_str(uint32_t val, char *buf);
+static void print_mode_info(uint32_t mode);
 
 int main(void)
 {
-	
+	led_init();
+	btn_init();
+	uart_init();
+
+	uint32_t mode = 0;  /* Start in slow blink mode */
+	bool btn_prev = false;  /* Previous button state for edge detection */
+
+    uart_print("Starting LED Blink Program! :D\r\n");
+	print_mode_info(mode);
+
+	while (1)
+	{
+		led_toggle();
+		delay_ms(half_periods[mode]);
+
+		/* Non-blocking button edge detection */
+		bool btn_now = btn_get_state();
+
+		/* Detect release edge: was pressed, now released */
+		if (btn_prev && !btn_now)
+		{
+			/* Advance to next mode */
+			mode = (mode + 1U) % NUM_MODES;
+			print_mode_info(mode);
+		}
+
+		btn_prev = btn_now;
+	}
+}
+
+/**
+ * @brief  Convert an unsigned integer to a decimal string.
+ * @param  val   Value to convert
+ * @param  buf   Output buffer (must be at least 11 bytes)
+ */
+static void uint_to_str(uint32_t val, char *buf)
+{
+	char tmp[11];
+	int i = 0;
+
+	if (val == 0)
+	{
+		buf[0] = '0';
+		buf[1] = '\0';
+		return;
+	}
+	while (val > 0)
+	{
+		tmp[i++] = '0' + (val % 10);
+		val /= 10;
+	}
+	int j = 0;
+	while (i > 0)
+	{
+		buf[j++] = tmp[--i];
+	}
+	buf[j] = '\0';
+}
+
+/**
+ * @brief  Print current mode and blink half-period over UART.
+ * @param  mode  Current blink mode index
+ */
+static void print_mode_info(uint32_t mode)
+{
+	char num[11];
+
+	uart_print("Mode: ");
+	uart_print(mode_names[mode]);
+	uart_print(" | Half Period: ");
+	uint_to_str(half_periods[mode], num);
+	uart_print(num);
+	uart_print(" ms\r\n");
 }
