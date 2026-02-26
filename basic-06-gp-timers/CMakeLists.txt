@@ -45,6 +45,7 @@ set(sources_SRCS
 	${CMAKE_CURRENT_SOURCE_DIR}/Src/main.c
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/gpio.c
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/uart.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/Src/timer.c
     ${CMAKE_CURRENT_SOURCE_DIR}/Src/system_stm32c0xx.c
 )
 
