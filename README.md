@@ -32,6 +32,7 @@ basic-XX-<description>/
 - **basic-03-uart**: UART basic driver project.
 - **basic-04-adc**: ADC basic driver simulating a volume controller project.
 - **basic-05-systick**: Systick Timer basic driver that uses this mcu embedded timer as a delay tool to control the LED of NUCLEO-C031C6.
+- **basic-06-gp-timers**: General purpose timers driver that it´s used in a F1 start race sequence game.
 
 ## Requirements
 
