@@ -23,7 +23,6 @@
 #define MEDIUM_HALF_PERIOD_MS  250U   /* 2 Hz  → 250 ms on, 250 ms off */
 #define FAST_HALF_PERIOD_MS    125U   /* 4 Hz  → 125 ms on, 125 ms off */
 
-#define DEBOUNCE_MS             50U   /* Button debounce time */
 #define NUM_MODES                3U
 
 static const uint32_t half_periods[NUM_MODES] = {
